@@ -9,3 +9,4 @@ http://cardirectory.eu-north-1.elasticbeanstalk.com/cars?page=1
 - Диаграмма
 - Кэширование GET запросов
 - БД PostgreSQL
+- Валидация полей
