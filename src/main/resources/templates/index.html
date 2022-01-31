@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- Useful meta tags -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="index, follow">
+    <meta name="google" content="notranslate">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/style.min.css">
+    
+    <title>Cars | Home</title>
+</head>
+<body class="bg-light">
+
+    <header>
+        <div class="container">
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-md-8">
+                    <div class="d-flex justify-content-end">
+                        <a href="/chart">
+                            <i class="far fa-chart-bar fa-2x"></i>
+                        </a>
+                    </div>
+                    <div class="p-5 text-center">
+                        <h1 class="mb-3">Featured vehicles</h1>
+                        <h4 class="mb-4">find your car</h4>
+                        <div class="mt-3 inputs">
+                            <form action="/cars/search" method="post">
+                                <button type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <input
+                                    type="text"
+                                    name="number"
+                                    class="form-control bg-light"
+                                    placeholder="Serial number"
+                                />
+                            </form>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/cars?page=1&body=sedan">
+                                <i class="fas fa-car-side fa-2x text-success"></i>
+                            </a>
+                            <a href="/cars?page=1&body=pickup">
+                                <i class="fas fa-truck-pickup fa-2x text-warning"></i>
+                            </a>
+                            <a href="/cars?page=1&body=truck">
+                                <i class="fas fa-truck fa-2x text-danger"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container-fluid">
+        <div class="container">
+            <div class="content p-3">
+                <div class="card m-4" th:if="${canAdd}">
+                    <p class="text-center m-4">New car</p>
+                    <form action="/cars?page=1" th:object="${car}" th:metho d="post" class="h-100 d-grid my-auto" autocomplete="off" id="add-car">
+                        <div class="input-group mb-3">
+                            <input th:field="*{number}" id="car-number" name="number" type="text" class="form-control" placeholder="Number" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input th:field="*{model}" id="car-model" name="model" type="text" class="form-control" placeholder="Model" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input th:field="*{year}" id="car-year" name="year" type="text" class="form-control" placeholder="Year" required>
+                        </div>
+                        <div class="color input-group mb-3 d-flex justify-content-between">
+                            <label for="car-color">Color</label>
+                            <input th:field="*{color}" type="color" id="car-color" name="car-color" class="border-0 bg-transparent"
+                                   value="#f6b73c">
+                        </div>
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="form-check form-check-inline">
+                                <input th:field="*{body}" class="form-check-input" type="radio" name="body" id="inlineRadio1" value="Sedan" required>
+                                <label class="form-check-label" for="inlineRadio1">Sedan</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input th:field="*{body}" class="form-check-input" type="radio" name="body" id="inlineRadio2" value="Pickup" required>
+                                <label class="form-check-label" for="inlineRadio2">Pickup</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input th:field="*{body}" class="form-check-input" type="radio" name="body" id="inlineRadio3" value="Truck" required>
+                                <label class="form-check-label" for="inlineRadio3">Truck</label>
+                            </div>
+                        </div>
+                        <button id="car-submit" type="submit" class="w-100 my-3">
+                            <i class="fas fa-check mg-auto"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="card m-4" th:each="car : ${cars}">
+                    <form th:action="@{'/cars/{number}'(number=${car.getNumber()})}" th:method="delete">
+                        <div class="card__content text-center">
+                            <a th:href="@{/cars/{number}(number=${car.getNumber()})}" class="p-0 card__link">
+                                <img
+                                    src="/assets/images/1.jpg"
+                                    alt=""
+                                    class="h-200"
+                                />
+                            </a>
+                            <div
+                                class="card__description d-flex justify-content-between"
+                            >
+                                <p class="text-muted">Number</p>
+                                <input type="text" name="number" class="card__input border-0 text-end"
+                                       th:value="${car.getNumber()}" readonly/>
+                            </div>
+                            <div
+                                class="card__description d-flex justify-content-between"
+                            >
+                                <p class="text-muted">Model</p>
+                                <input type="text" name="model" th:value="${car.getModel()}" readonly
+                                       class="card__input border-0 text-end" required/>
+                            </div>
+                            <div
+                                class="card__description d-flex justify-content-between"
+                            >
+                                <p class="text-muted">Year</p>
+                                <input type="text" name="year" th:value="${car.getYear()}" readonly
+                                       class="card__input border-0 text-end"/>
+                            </div>
+                            <div
+                                class="card__description d-flex justify-content-between"
+                            >
+                                <p class="text-muted">Color</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="card__circle">
+                                    <circle cx="10" cy="10" r="10" th:fill="${car.getColor()}" />
+                                </svg>
+                            </div>
+                            <div
+                                class="card__description d-flex justify-content-between"
+                            >
+                                <p class="text-muted">Body</p>
+                                <input type="text" name="body" th:value="${car.getBody()}" readonly
+                                       class="card__input border-0 text-end"/>
+                            </div>
+                        </div>
+
+                        <div class="card__description d-flex justify-content-center">
+                            <button>
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content p-3">
+                <div class="d-flex justify-content-between w-100 m-4">
+                    <div>
+                        <a th:if="${!isFirstPage}"
+                           th:href="@{'/cars?page={pageNumber}'(pageNumber=${pageNumber}-1)}"><i
+                                class="fas fa-chevron-left"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <p th:text="${pageNumber} + '/' + ${pageCount}"></p>
+                    </div>
+                    <div>
+                        <a th:if="${!isLastPage}"
+                           th:href="@{'/cars?page={pageNumber}'(pageNumber=${pageNumber}+1)}"><i
+                                class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer>
+        <p class="text-center">© 2022 tingsha</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/57f46d2097.js" crossorigin="anonymous"></script>
+
+    <!-- bs5-toast library -->
+    <script src="assets/js/bs5-toast.js"></script>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
